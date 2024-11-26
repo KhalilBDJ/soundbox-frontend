@@ -1,10 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{html,ts}"],
+    "./src/**/*.{html,ts}",
+  ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        anonymous: ['"Anonymous Pro"', 'monospace'],
+      },
+      backgroundImage: {
+        'custom-bg': "url('./assets/images/background.jpg')",
+      },
+    },
   },
   plugins: [],
-}
+};
+
 
