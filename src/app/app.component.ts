@@ -1,13 +1,15 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: '**', redirectTo: 'login' } // Redirige vers la page de connexion par défaut
-];
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import {BoxComponent} from './box/box.component';
+import {MainContainerComponent} from './layouts/main-container/main-container.component';
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, BoxComponent, MainContainerComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
-export class AppRoutingModule {}
+export class AppComponent {
+  title = 'frontend';
+}
