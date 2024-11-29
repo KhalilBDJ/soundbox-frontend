@@ -23,7 +23,9 @@ export class LoginComponent {
   onLogin(): void {
     this.authService.login({ email: this.email, password: this.password }).subscribe(
       (response) => {
-        this.router.navigate(['/home']);
+        console.log('Login successful:', response);
+        this.authService.setUserEmail(response.email); // Stocker l'email
+        this.router.navigate(['/home']); // Rediriger après login
       },
       (error) => {
         this.errorMessage = 'Email ou mot de passe incorrect.';
@@ -31,3 +33,4 @@ export class LoginComponent {
     );
   }
 }
+

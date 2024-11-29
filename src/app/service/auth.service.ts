@@ -36,6 +36,17 @@ export class AuthService {
       })
     );
   }
+  private userEmail: string = ''; // Stocke l'email après login
+
+  // Appelé après un login réussi pour stocker l'email
+  setUserEmail(email: string): void {
+    this.userEmail = email;
+  }
+
+  // Retourne l'email de l'utilisateur
+  getUserEmail(): string {
+    return this.userEmail;
+  }
 
   // Vérifier si un utilisateur est connecté
   isLoggedIn(): boolean {
