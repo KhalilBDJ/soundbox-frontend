@@ -11,7 +11,7 @@ interface LoginRequestDTO {
 interface LoginResponseDTO {
   id: number;
   email: string;
-  token: string;
+  jwtToken: string;
 }
 
 @Injectable({
@@ -27,7 +27,7 @@ export class AuthService {
     return this.http.post<LoginResponseDTO>(`${this.apiUrl}/login`, credentials).pipe(
       map((response) => {
         // Stocker le token dans le localStorage
-        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('authToken', response.jwtToken);
         return response;
       }),
       catchError((error) => {
