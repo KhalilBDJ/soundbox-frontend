@@ -1,3 +1,8 @@
-<div class="w-40 h-40 bg-blue-200 bg-opacity-80 border-blue-300 rounded-2xl shadow-md relative">
-  <app-horizontal-buttons-layout></app-horizontal-buttons-layout>
+<div class="w-40 h-40 bg-blue-200 bg-opacity-80 border border-blue-300 rounded-2xl shadow-md relative">
+  <span class="absolute top-4 left-1/2 transform -translate-x-1/2 font-anonymous text-white">
+    {{ sound.name }}
+  </span>
+  <app-horizontal-buttons-layout>
+    <app-play-button [soundData]="sound.data"></app-play-button>
+  </app-horizontal-buttons-layout>
 </div>
