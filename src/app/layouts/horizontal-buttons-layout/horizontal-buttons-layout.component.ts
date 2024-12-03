@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ModifyButtonComponent} from "../../buttons/modify-button/modify-button.component";
 import {PlayButtonComponent} from "../../buttons/play-button/play-button.component";
+import {Sound} from '../../service/sound.service';
 
 @Component({
   selector: 'app-horizontal-buttons-layout',
@@ -13,5 +14,6 @@ import {PlayButtonComponent} from "../../buttons/play-button/play-button.compone
   styleUrl: './horizontal-buttons-layout.component.css'
 })
 export class HorizontalButtonsLayoutComponent {
+  @Input() sound!: Sound; // Accepter les données du son
 
 }

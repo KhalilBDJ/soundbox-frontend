@@ -5,6 +5,7 @@ import {
   HorizontalButtonsLayoutComponent
 } from '../layouts/horizontal-buttons-layout/horizontal-buttons-layout.component';
 import {Sound} from '../service/sound.service';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-box',
@@ -12,7 +13,8 @@ import {Sound} from '../service/sound.service';
   imports: [
     ModifyButtonComponent,
     PlayButtonComponent,
-    HorizontalButtonsLayoutComponent
+    HorizontalButtonsLayoutComponent,
+    NgIf
   ],
   templateUrl: './box.component.html',
   styleUrl: './box.component.css'

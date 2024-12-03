@@ -6,7 +6,7 @@ export interface Sound {
   id: number;
   name: string;
   duration: number;
-  data: Uint8Array; // Assurez-vous que le type est correct
+  data: string; // Assurez-vous que le type est correct
 }
 
 @Injectable({

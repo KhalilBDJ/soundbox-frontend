@@ -19,10 +19,10 @@ export class MainContainerComponent implements OnInit {
   constructor(private soundService: SoundService) {}
 
   ngOnInit(): void {
-    // Récupérer les sons lors de l'initialisation du composant
     this.soundService.getUserSounds().subscribe(
       (data) => {
-        this.sounds = data; // Stocker les sons dans la propriété `sounds`
+        console.log('Données des sons après conversion:', data); //
+        this.sounds = data;
       },
       (error) => {
         console.error('Error fetching user sounds:', error);
