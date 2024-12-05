@@ -2,13 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {BoxComponent} from '../../box/box.component';
 import {Sound, SoundService} from '../../service/sound.service';
 import {NgForOf} from '@angular/common';
+import {AddSoundBoxComponent} from '../../add-sound-box/add-sound-box.component';
 
 @Component({
   selector: 'app-main-container',
   standalone: true,
   imports: [
     BoxComponent,
-    NgForOf
+    NgForOf,
+    AddSoundBoxComponent
   ],
   templateUrl: './main-container.component.html',
   styleUrl: './main-container.component.css'

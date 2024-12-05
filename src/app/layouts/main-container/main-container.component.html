@@ -3,5 +3,6 @@
   <div class="flex flex-wrap gap-x-20 gap-y-20 justify-start items-start w-full">
     <!-- Passer les données de chaque son à app-box -->
     <app-box *ngFor="let sound of sounds" [sound]="sound"></app-box>
+    <app-add-sound-box></app-add-sound-box>
   </div>
 </div>
