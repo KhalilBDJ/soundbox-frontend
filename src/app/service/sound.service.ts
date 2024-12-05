@@ -17,7 +17,6 @@ export class SoundService {
 
   constructor(private http: HttpClient) {}
 
-  // Récupérer les sons de l'utilisateur connecté
   getUserSounds(): Observable<Sound[]> {
     return this.http.get<Sound[]>(`${this.apiUrl}/user/me`);
   }

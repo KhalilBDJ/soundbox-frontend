@@ -18,7 +18,7 @@ interface LoginResponseDTO {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/auth'; // URL de votre API
+  private apiUrl = 'http://localhost:8080/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -26,8 +26,8 @@ export class AuthService {
   login(credentials: LoginRequestDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(`${this.apiUrl}/login`, credentials).pipe(
       map((response) => {
-        // Stocker le token dans le localStorage
         localStorage.setItem('authToken', response.jwtToken);
+        localStorage.setItem('userEmail', response.email);
         return response;
       }),
       catchError((error) => {
@@ -36,25 +36,27 @@ export class AuthService {
       })
     );
   }
-  private userEmail: string = ''; // Stocke l'email après login
+  private userEmail: string = '';
 
-  // Appelé après un login réussi pour stocker l'email
   setUserEmail(email: string): void {
     this.userEmail = email;
   }
 
-  // Retourne l'email de l'utilisateur
-  getUserEmail(): string {
-    return this.userEmail;
+  getUserEmail(): string |  null  {
+    return localStorage.getItem('userEmail');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
   }
 
   // Vérifier si un utilisateur est connecté
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('authToken');
+    return !!this.getToken();
   }
 
-  // Déconnexion de l'utilisateur
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userEmail');
   }
 }

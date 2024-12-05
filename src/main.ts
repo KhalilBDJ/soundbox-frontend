@@ -7,7 +7,7 @@ import { JwtInterceptor} from './app/interceptor/JwtInterceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(withInterceptors([JwtInterceptor])), // Ajoutez l'intercepteur JWT
+    provideHttpClient(withInterceptors([JwtInterceptor])),
     provideRouter(routes),
   ],
 })

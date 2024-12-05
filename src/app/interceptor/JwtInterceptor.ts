@@ -1,23 +1,35 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('authToken'); // Récupère le JWT depuis le localStorage
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
-  // Vérifier si l'URL doit être exclue
+export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = localStorage.getItem('authToken');
+  const router = inject(Router);
+
   const excludedUrls = ['/auth/login', '/auth/register'];
   if (excludedUrls.some((url) => req.url.includes(url))) {
-    return next(req); // Ignorer les URLs exclues
+    return next(req);
   }
 
   if (token) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`, // Ajoute l'en-tête Authorization
+        Authorization: `Bearer ${token}`,
       },
     });
   }
 
-  // Debug : Afficher les en-têtes avant de transmettre la requête
   console.log('Headers after clone:', req.headers);
 
-  return next(req); // Passe la requête au prochain intercepteur ou au backend
+  return next(req).pipe(
+    catchError((error) => {
+      if (error.status === 403) {
+        localStorage.removeItem('authToken');
+        router.navigate(['']);
+      }
+      return throwError(error);
+    })
+  );
 };

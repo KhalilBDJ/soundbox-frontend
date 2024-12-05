@@ -19,13 +19,21 @@ export class LoginComponent {
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
+  ngOnInit(): void {
+    const token = this.authService.getToken();
+    if (token) {
+      this.router.navigate(['/home']);
+    }
+
+  }
+
 
   onLogin(): void {
     this.authService.login({ email: this.email, password: this.password }).subscribe(
       (response) => {
         console.log('Login successful:', response);
-        this.authService.setUserEmail(response.email); // Stocker l'email
-        this.router.navigate(['/home']); // Rediriger après login
+        this.authService.setUserEmail(response.email);
+        this.router.navigate(['/home']);
       },
       (error) => {
         this.errorMessage = 'Email ou mot de passe incorrect.';

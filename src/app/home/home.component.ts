@@ -12,12 +12,11 @@ import {MainContainerComponent} from '../layouts/main-container/main-container.c
   ]
 })
 export class HomeComponent {
-  userEmail: string = ''; // Email de l'utilisateur connecté
+  userEmail: string | null = '';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    // Récupérez l'email de l'utilisateur depuis le service AuthService
-    this.userEmail = this.authService.getUserEmail(); // Ajoutez cette méthode dans AuthService
+    this.userEmail = this.authService.getUserEmail(); //
   }
 }
