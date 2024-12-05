@@ -23,16 +23,30 @@
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
 >
   <div
-    class="bg-white w-96 h-64 rounded-lg shadow-lg p-4 flex flex-col items-center font-anonymous"
-    [class.animate-fadeIn]="!isPopupFadingOut"
+    class="bg-white w-96 h-auto rounded-lg shadow-lg p-4 flex flex-col items-center font-anonymous animate-fadeIn"
     [class.animate-fadeOut]="isPopupFadingOut"
   >
-    <h2 class="text-xl font-semibold mb-4">Ajouter un son</h2>
-    <p class="text-gray-600 mb-6">Voici un composant de popup.</p>
+    <h2 class="text-xl font-semibold mb-4">Ajouter un son depuis YouTube</h2>
+
+    <!-- Champ de texte pour l'URL -->
+    <input
+      type="text"
+      [(ngModel)]="youtubeUrl"
+      placeholder="Entrez l'URL YouTube"
+      class="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <!-- Bouton Ajouter -->
+    <button
+      class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+      (click)="addSoundFromYouTube()"
+    >
+      Ajouter
+    </button>
 
     <!-- Bouton pour fermer -->
     <button
-      class="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 font-anonymous"
+      class="mt-4 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 font-anonymous"
       (click)="closePopup()"
     >
       Fermer
