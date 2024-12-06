@@ -40,4 +40,9 @@ export class MainContainerComponent implements OnInit {
     console.log('Un son a été ajouté, rafraîchissement des données...');
     this.refreshSounds();
   }
+
+  onSoundDeleted(): void {
+    console.log('Son supprimé, actualisation des données...');
+    this.refreshSounds(); // Actualiser la liste après suppression
+  }
 }

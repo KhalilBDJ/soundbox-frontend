@@ -30,6 +30,8 @@ export class SoundService {
   updateSoundName(soundId: number, newName: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/user/${soundId}`, { name: newName });
   }
-
+  deleteSound(soundId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${soundId}`);
+  }
 
 }

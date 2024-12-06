@@ -11,8 +11,10 @@
 
 <!-- Popup -->
 <div
-  *ngIf="isPopupVisible"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  *ngIf="!isFullyHidden"
+  [class.animate-fadeIn]="!isFadingOut"
+  [class.animate-fadeOut]="isFadingOut"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 font-anonymous"
 >
   <div class="bg-white w-96 h-auto rounded-lg shadow-lg p-4 flex flex-col items-center">
     <h2 class="text-xl font-semibold mb-4">Modifier le nom du son</h2>
@@ -38,6 +40,12 @@
         (click)="closeEditPopup()"
       >
         Fermer
+      </button>
+      <button
+        class="px-4 py-2 bg-red-700 text-white rounded-md shadow-md hover:bg-red-800"
+        (click)="deleteSound()"
+      >
+        Supprimer
       </button>
     </div>
   </div>
