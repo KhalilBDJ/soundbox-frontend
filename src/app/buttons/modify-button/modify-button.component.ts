@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-modify-button',
   standalone: true,
-  imports: [],
   templateUrl: './modify-button.component.html',
-  styleUrl: './modify-button.component.css'
+  styleUrls: ['./modify-button.component.css']
 })
 export class ModifyButtonComponent {
+  @Output() modifyClicked = new EventEmitter<void>(); // Émet un événement au clic
 
+  onClick(): void {
+    this.modifyClicked.emit(); // Notifie le parent
+  }
 }

@@ -1,19 +1,23 @@
-import {Component, Input} from '@angular/core';
-import {ModifyButtonComponent} from "../../buttons/modify-button/modify-button.component";
-import {PlayButtonComponent} from "../../buttons/play-button/play-button.component";
-import {Sound} from '../../service/sound.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Sound } from '../../service/sound.service';
+import {PlayButtonComponent} from '../../buttons/play-button/play-button.component';
+import {ModifyButtonComponent} from '../../buttons/modify-button/modify-button.component';
 
 @Component({
   selector: 'app-horizontal-buttons-layout',
   standalone: true,
-    imports: [
-        ModifyButtonComponent,
-        PlayButtonComponent
-    ],
   templateUrl: './horizontal-buttons-layout.component.html',
-  styleUrl: './horizontal-buttons-layout.component.css'
+  imports: [
+    PlayButtonComponent,
+    ModifyButtonComponent
+  ],
+  styleUrls: ['./horizontal-buttons-layout.component.css']
 })
 export class HorizontalButtonsLayoutComponent {
-  @Input() sound!: Sound; // Accepter les données du son
+  @Input() sound!: Sound;
+  @Output() modifyClicked = new EventEmitter<void>(); // Émet un événement au parent
 
+  onModifyClick(): void {
+    this.modifyClicked.emit(); // Notifie le parent que le bouton Modifier a été cliqué
+  }
 }

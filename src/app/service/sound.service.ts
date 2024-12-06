@@ -27,4 +27,9 @@ export class SoundService {
     });
   }
 
+  updateSoundName(soundId: number, newName: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/user/${soundId}`, { name: newName });
+  }
+
+
 }
