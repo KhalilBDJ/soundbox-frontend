@@ -21,13 +21,12 @@ export class SoundService {
     return this.http.get<Sound[]>(`${this.apiUrl}/user/me`);
   }
 
-  // Méthode existante pour upload depuis YouTube (sans preview)
-  uploadSoundFromYouTube(youtubeUrl: string): Observable<{ message: string; name: string }> {
+  uploadSoundFromYouTube(youtubeUrl: string, name: string): Observable<{ message: string; name: string }> {
     return this.http.post<{ message: string; name: string }>(
       `${this.apiUrl}/user/youtube`,
       null,
       {
-        params: { url: youtubeUrl },
+        params: { url: youtubeUrl, name }, // Ajout du paramètre `name`
       }
     );
   }

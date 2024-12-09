@@ -47,15 +47,18 @@ export class AddSoundBoxComponent {
   }
 
   addSoundFromYouTube(): void {
-    this.soundService.uploadSoundFromYouTube(this.youtubeUrl).subscribe({
+    // Priorité au nom saisi par l'utilisateur
+    const finalName = this.soundName.trim() || 'Untitled Sound';
+
+    this.soundService.uploadSoundFromYouTube(this.youtubeUrl, finalName).subscribe({
       next: (response) => {
-        console.log('Son ajouté avec succès :', response);
+        console.log('Son ajouté avec succès depuis YouTube :', response);
         alert(`Son ajouté avec succès : ${response.message}`);
         this.soundAdded.emit();
         this.closePopup();
       },
       error: (error) => {
-        console.error('Erreur lors de l\'ajout du son :', error);
+        console.error('Erreur lors de l\'ajout du son depuis YouTube :', error);
         alert('Erreur : ' + (error.error?.error || 'Une erreur est survenue.'));
       },
     });
@@ -67,18 +70,13 @@ export class AddSoundBoxComponent {
       return;
     }
 
-    // Si l'utilisateur n'a pas renseigné de nom, on utilise le nom du fichier sans extension
-    let finalName = this.soundName.trim();
-    if (!finalName) {
-      const fileName = this.selectedFile.name;
-      const dotIndex = fileName.lastIndexOf('.');
-      finalName = dotIndex > 0 ? fileName.substring(0, dotIndex) : fileName;
-    }
+    // Priorité au nom saisi par l'utilisateur
+    const finalName = this.soundName.trim() || this.selectedFile.name.split('.')[0];
 
     const formData = new FormData();
     formData.append('data', this.selectedFile);
-    formData.append('name', finalName);
-    formData.append('duration', '0'); // La durée peut être calculée côté backend ou laissée à 0
+    formData.append('name', finalName); // Utilisation de `finalName`
+    formData.append('duration', '0'); // La durée peut être calculée côté backend
 
     this.soundService.uploadSoundFileToUser(formData).subscribe({
       next: (response) => {
@@ -93,6 +91,7 @@ export class AddSoundBoxComponent {
       },
     });
   }
+
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0] || null;
