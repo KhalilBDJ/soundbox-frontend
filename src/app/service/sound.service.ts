@@ -27,6 +27,11 @@ export class SoundService {
     });
   }
 
+  uploadSoundFileToUser(formData: FormData): Observable<string> {
+    return this.http.post<string>(`${this.apiUrl}/user/`, formData);
+  }
+
+
   updateSoundName(soundId: number, newName: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/user/${soundId}`, { name: newName });
   }
