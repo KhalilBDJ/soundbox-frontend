@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {AudioSpectrumComponent} from '../audio-spectrum/audio-spectrum.component';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import {CommonModule} from '@angular/common';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [
-    FormsModule, CommonModule
+    FormsModule, CommonModule, AudioSpectrumComponent
   ]
 })
 export class LoginComponent {
