@@ -1,12 +1,9 @@
-<div id="waveform"></div>
+<div id="waveform" class="w-full  bg-gray-100 border border-gray-300 shadow-md rounded-md"></div>
 
-<p>
-  <label>
-    <input type="checkbox" checked="${loop}" />
-    Loop regions
-  </label>
-
-  <label style="margin-left: 2em">
-    Zoom: <input type="range" min="10" max="1000" value="10" />
-  </label>
-</p>
+<div class="flex items-center mt-4 space-x-4">
+  <button
+    id="play-region"
+    class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">
+    Play Region
+  </button>
+</div>
