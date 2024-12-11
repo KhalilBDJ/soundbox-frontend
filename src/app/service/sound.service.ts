@@ -65,13 +65,4 @@ export class SoundService {
     );
   }
 
-  /**
-   * Nouvelle méthode pour uploader le son croppé.
-   * Le backend effectuera le trimming en fonction des paramètres start/end et sauvegardera le résultat.
-   */
-  uploadCroppedSound(formData: FormData): Observable<string> {
-    // Assurez-vous que le backend a un endpoint tel que /sounds/user/trim
-    // qui traite les données, découpe l'audio et l'enregistre
-    return this.http.post<string>(`${this.apiUrl}/user/trim`, formData);
-  }
 }

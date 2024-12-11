@@ -24,54 +24,81 @@
     class="bg-white w-96 h-auto rounded-lg shadow-lg p-4 flex flex-col items-center font-anonymous animate-fadeIn"
     [class.animate-fadeOut]="isPopupFadingOut"
   >
-    <h2 class="text-xl font-semibold mb-4">Ajouter un son</h2>
+    <h2 class="text-xl font-semibold mb-4" *ngIf="!showAudioSpectrum">Ajouter un son</h2>
 
-    <!-- Champ nom du son -->
-    <input
-      type="text"
-      [(ngModel)]="soundName"
-      placeholder="Entrez le nom du son (optionnel)"
-      class="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-
-    <!-- Option 1: URL YouTube -->
-    <div class="mb-4 w-full">
-      <label class="block mb-2">Depuis YouTube (URL)</label>
+    <!-- Formulaire initial (URL YouTube ou Fichier), affiché si on n'est pas encore en mode spectre -->
+    <div *ngIf="!showAudioSpectrum">
+      <!-- Champ nom du son -->
       <input
         type="text"
-        [(ngModel)]="youtubeUrl"
-        placeholder="Entrez l'URL YouTube"
-        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="soundName"
+        placeholder="Entrez le nom du son (optionnel)"
+        class="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+
+      <!-- Option 1: URL YouTube -->
+      <div class="mb-4 w-full">
+        <label class="block mb-2">Depuis YouTube (URL)</label>
+        <input
+          type="text"
+          [(ngModel)]="youtubeUrl"
+          placeholder="Entrez l'URL YouTube"
+          class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="text-center mb-4 font-semibold">OU</div>
+
+      <!-- Option 2: Fichier local -->
+      <div class="mb-4 w-full">
+        <label class="block mb-2">Depuis un fichier (MP3, WAV)</label>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept=".mp3,.wav"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Bouton Ajouter -->
+      <button
+        class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 mb-4"
+        (click)="addSound()"
+      >
+        Ajouter
+      </button>
+
+      <!-- Bouton pour fermer -->
+      <button
+        class="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 font-anonymous"
+        (click)="closePopup()"
+      >
+        Fermer
+      </button>
     </div>
 
-    <div class="text-center mb-4 font-semibold">OU</div>
+    <!-- Une fois l'audio chargé, on affiche le composant AudioSpectrumComponent -->
+    <div *ngIf="showAudioSpectrum" class="w-full">
+      <h2 class="text-xl font-semibold mb-4">Prévisualiser et découper</h2>
+      <app-audio-spectrum
+        [audioBlob]="audioBlob"
+        (regionChange)="onRegionChange($event)"
+      ></app-audio-spectrum>
 
-    <!-- Option 2: Fichier local -->
-    <div class="mb-4 w-full">
-      <label class="block mb-2">Depuis un fichier (MP3, WAV)</label>
-      <input
-        type="file"
-        (change)="onFileSelected($event)"
-        accept=".mp3,.wav"
-        class="w-full"
-      />
+      <div class="mt-4 flex space-x-4">
+        <button
+          class="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600"
+          (click)="saveTrimmedSound()"
+        >
+          Enregistrer le trim
+        </button>
+        <button
+          class="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600"
+          (click)="closePopup()"
+        >
+          Annuler
+        </button>
+      </div>
     </div>
-
-    <!-- Bouton Ajouter -->
-    <button
-      class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 mb-4"
-      (click)="addSound()"
-    >
-      Ajouter
-    </button>
-
-    <!-- Bouton pour fermer -->
-    <button
-      class="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 font-anonymous"
-      (click)="closePopup()"
-    >
-      Fermer
-    </button>
   </div>
 </div>
