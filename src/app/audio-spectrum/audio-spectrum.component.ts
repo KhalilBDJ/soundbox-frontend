@@ -52,6 +52,7 @@ export class AudioSpectrumComponent {
     });
   }
 
+  //region.play() not working as documentation says, even on examples
   private playRegion() {
     const regions = this.regionsPlugin.getRegions();
     const regionKeys = Object.keys(regions);
