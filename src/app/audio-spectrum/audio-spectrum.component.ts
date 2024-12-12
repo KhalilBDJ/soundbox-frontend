@@ -44,6 +44,7 @@ export class AudioSpectrumComponent {
         console.log("region exited");
         this.waveSurfer.pause();
         this.waveSurfer.seekTo(e.start /this.waveSurfer.getDuration());
+        this.waveSurfer.play();
       });
     });
 
@@ -59,7 +60,7 @@ export class AudioSpectrumComponent {
     const regionKeys = Object.keys(regions);
 
     if (regionKeys.length > 0) {
-      const region = regions[regionKeys[0]];// Utiliser la première région disponible
+      const region = regions[regionKeys[0]];
       console.log(region.end + " " + region.start);
       region.play();
     } else {
