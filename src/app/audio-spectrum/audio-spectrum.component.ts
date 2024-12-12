@@ -62,8 +62,6 @@ export class AudioSpectrumComponent {
     if (regionKeys.length > 0) {
       const region = regions[regionKeys[0]];// Utiliser la première région disponible
       console.log(region.end + " " + region.start);
-      this.waveSurfer.play();
-
       region.play();
     } else {
       console.warn('No regions available to play.');
