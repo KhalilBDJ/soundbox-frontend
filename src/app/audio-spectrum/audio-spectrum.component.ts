@@ -42,9 +42,6 @@ export class AudioSpectrumComponent {
 
       this.regionsPlugin.on('region-out',(e:any)=>{
         console.log("region exited");
-        this.waveSurfer.pause();
-        this.waveSurfer.seekTo(e.start /this.waveSurfer.getDuration());
-        this.waveSurfer.play();
       });
     });
 
