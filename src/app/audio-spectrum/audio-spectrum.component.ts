@@ -42,8 +42,9 @@ export class AudioSpectrumComponent {
 
       this.regionsPlugin.on('region-out',(e:any)=>{
         console.log("region exited");
+        //this.waveSurfer.pause();
+        this.waveSurfer.setTime(e.start);
         this.waveSurfer.pause();
-        this.waveSurfer.seekTo(e.start /this.waveSurfer.getDuration());
       });
     });
 
@@ -61,6 +62,8 @@ export class AudioSpectrumComponent {
     if (regionKeys.length > 0) {
       const region = regions[regionKeys[0]];// Utiliser la première région disponible
       console.log(region.end + " " + region.start);
+      this.waveSurfer.play();
+
       region.play();
     } else {
       console.warn('No regions available to play.');
