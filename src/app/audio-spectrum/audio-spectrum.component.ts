@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import WaveSurfer from 'wavesurfer.js';
-import RegionsPlugin from 'wavesurfer.js/plugins/regions';
+import RegionsPlugin from 'wavesurfer.js/src/plugin/regions';
+
 
 @Component({
   selector: 'app-audio-spectrum',
@@ -17,34 +18,37 @@ export class AudioSpectrumComponent {
 
   ngOnInit() {
     // Initialisation de WaveSurfer avec le plugin Regions
-    this.regionsPlugin = RegionsPlugin.create();
+    this.regionsPlugin = RegionsPlugin.create({
+      regions:[
+        {
+          start: 0,
+          end: 1.5,
+          color: 'rgba(200, 0, 200, 0.5)',
+          drag: true,
+          resize: true,
+        }
+      ]
+    });
 
     this.waveSurfer = WaveSurfer.create({
       container: '#waveform',
       waveColor: 'rgb(200, 0, 200)',
       progressColor: 'rgb(100, 0, 100)',
-      url: '/assets/audio/wet_fart.mp3',
       plugins: [this.regionsPlugin],
     });
+
+    this.waveSurfer.load('/assets/audio/wet_fart.mp3')
 
     this.waveSurfer.on('ready', () => {
       // Obtenir la durée totale de l'audio
       const audioDuration = this.waveSurfer.getDuration();
 
-      // Ajouter une région couvrant toute la durée de l'audio
-      this.regionsPlugin.addRegion({
-        start: 0,
-        end: 1.5,
-        color: 'rgba(200, 0, 200, 0.5)',
-        drag: true,
-        resize: true,
-      });
 
       this.regionsPlugin.on('region-out',(e:any)=>{
         console.log("region exited");
-        //this.waveSurfer.pause();
+        this.waveSurfer.setTime(e.start);
+        this.waveSurfer.pause();
         //this.waveSurfer.setTime(e.start);
-        this.waveSurfer.stop();
       });
     });
 
@@ -56,12 +60,14 @@ export class AudioSpectrumComponent {
   }
 
   private playRegion() {
-    const regions = this.regionsPlugin.getRegions();
+    const regions = this.waveSurfer.regions.list;
     const regionKeys = Object.keys(regions);
 
     if (regionKeys.length > 0) {
       const region = regions[regionKeys[0]];// Utiliser la première région disponible
       console.log(region.end + " " + region.start);
+      //this.waveSurfer.setTime(region.start);
+      console.log(this.waveSurfer.getCurrentTime())
       region.play();
     } else {
       console.warn('No regions available to play.');
