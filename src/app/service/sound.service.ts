@@ -65,4 +65,14 @@ export class SoundService {
     );
   }
 
+  // Ajoutez cette méthode dans SoundService
+  trimAndUploadSound(audioBase64: string, start: number, end: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`http://localhost:5000/user/trim`, {
+      audio_base64: audioBase64,
+      start,
+      end,
+    });
+  }
+
+
 }
