@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import WaveSurfer from 'wavesurfer.js';
 import RegionsPlugin from 'wavesurfer.js/src/plugin/regions';
-import {SoundService} from '../service/sound.service';
+import { SoundService } from '../service/sound.service';
 
 @Component({
   selector: 'app-audio-spectrum',
@@ -19,6 +19,9 @@ export class AudioSpectrumComponent {
   constructor(private soundService: SoundService) {} // Injection du service
 
   ngOnInit() {
+    // Charger le fichier audio en Blob
+    this.loadAudioBlob('/assets/audio/wet_fart.mp3');
+
     // Initialisation de WaveSurfer avec le plugin Regions
     this.regionsPlugin = RegionsPlugin.create({
       regions: [
@@ -57,6 +60,23 @@ export class AudioSpectrumComponent {
     });
   }
 
+  private loadAudioBlob(url: string) {
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch audio from ${url}`);
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        this.audioBlob = blob;
+        console.log('Audio blob loaded:', this.audioBlob);
+      })
+      .catch(error => {
+        console.error('Error loading audio blob:', error);
+      });
+  }
+
   private playRegion() {
     const regions = this.waveSurfer.regions.list;
     const regionKeys = Object.keys(regions);
@@ -71,7 +91,7 @@ export class AudioSpectrumComponent {
         const reader = new FileReader();
         reader.onloadend = () => {
           const audioBase64 = (reader.result as string).split(',')[1]; // Récupérer la chaîne Base64 sans préfixe
-
+          console.log(audioBase64);
           // Appeler le service pour envoyer l'audio découpé
           this.soundService.trimAndUploadSound(audioBase64, region.start, region.end).subscribe(
             response => console.log('Audio trimmed and uploaded:', response),
