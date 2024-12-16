@@ -19,10 +19,9 @@ export class AudioSpectrumComponent {
   constructor(private soundService: SoundService) {} // Injection du service
 
   ngOnInit() {
-    // Charger le fichier audio en Blob
-    this.loadAudioBlob('/assets/audio/wet_fart.mp3');
 
-    // Initialisation de WaveSurfer avec le plugin Regions
+    console.log(this.audioBlob)
+
     this.regionsPlugin = RegionsPlugin.create({
       regions: [
         {
@@ -42,12 +41,19 @@ export class AudioSpectrumComponent {
       plugins: [this.regionsPlugin],
     });
 
-    this.waveSurfer.load('/assets/audio/wet_fart.mp3');
+    this.waveSurfer.loadBlob(this.audioBlob);
+
+
 
     this.waveSurfer.on('ready', () => {
       // Obtenir la durée totale de l'audio
       const audioDuration = this.waveSurfer.getDuration();
+      console.log(audioDuration)
 
+      this.waveSurfer.on('region-update-end', (region: any) => {
+        console.log('Region updated:', region.start, region.end);
+        this.regionChange.emit({ start: region.start, end: region.end });
+      });
       this.regionsPlugin.on('region-out', (e: any) => {
         console.log('Region exited');
       });
@@ -85,22 +91,6 @@ export class AudioSpectrumComponent {
       const region = regions[regionKeys[0]]; // Utiliser la première région disponible
 
       console.log(region.end + ' ' + region.start);
-
-      // Convertir l'audio en base64
-      if (this.audioBlob) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const audioBase64 = (reader.result as string).split(',')[1]; // Récupérer la chaîne Base64 sans préfixe
-          console.log(audioBase64);
-          // Appeler le service pour envoyer l'audio découpé
-          this.soundService.trimAndUploadSound(audioBase64, region.start, region.end).subscribe(
-            response => console.log('Audio trimmed and uploaded:', response),
-            error => console.error('Error uploading trimmed audio:', error)
-          );
-        };
-        reader.readAsDataURL(this.audioBlob);
-      }
-
       region.play();
     } else {
       console.warn('No regions available to play.');

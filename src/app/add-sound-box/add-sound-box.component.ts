@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { SoundService } from '../service/sound.service';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import {AudioSpectrumComponent} from '../audio-spectrum/audio-spectrum.component';
+import { AudioSpectrumComponent } from '../audio-spectrum/audio-spectrum.component';
 
 @Component({
   selector: 'app-add-sound-box',
@@ -17,17 +17,17 @@ import {AudioSpectrumComponent} from '../audio-spectrum/audio-spectrum.component
 })
 export class AddSoundBoxComponent {
   @Output() soundAdded = new EventEmitter<void>();
+
   isPopupVisible: boolean = false;
   isPopupFadingOut: boolean = false;
   youtubeUrl: string = '';
   selectedFile: File | null = null;
   soundName: string = '';
-
   showAudioSpectrum: boolean = false;
-  audioBlob: Blob | null = null;       // Le Blob du son à pré-écouter/crop
-  audioName: string = '';              // Le nom final du son
-  regionStart: number = 0;             // Position début de la région
-  regionEnd: number = 0;               // Position fin de la région
+  audioBlob: Blob | null = null;
+  audioName: string = ''; // Nom du son
+  regionStart: number = 0; // Début de la région
+  regionEnd: number = 0;   // Fin de la région
 
   constructor(private soundService: SoundService) {}
 
@@ -40,22 +40,23 @@ export class AddSoundBoxComponent {
     this.isPopupFadingOut = true;
     setTimeout(() => {
       this.isPopupVisible = false;
-      // Reset des champs
-      this.youtubeUrl = '';
-      this.selectedFile = null;
-      this.soundName = '';
-      this.showAudioSpectrum = false;
-      this.audioBlob = null;
-      this.audioName = '';
+      this.resetForm();
     }, 300);
   }
 
+  resetForm(): void {
+    this.youtubeUrl = '';
+    this.selectedFile = null;
+    this.soundName = '';
+    this.showAudioSpectrum = false;
+    this.audioBlob = null;
+    this.audioName = '';
+  }
+
   addSound(): void {
-    // Si l'utilisateur a entré une URL YouTube, on récupère le preview
     if (this.youtubeUrl.trim()) {
       this.addSoundFromYouTubePreview();
     } else if (this.selectedFile) {
-      // On a un fichier local
       this.prepareLocalFilePreview();
     } else {
       alert('Veuillez entrer une URL YouTube ou sélectionner un fichier audio.');
@@ -66,10 +67,9 @@ export class AddSoundBoxComponent {
     const finalName = this.soundName.trim() || 'Untitled Sound';
     this.soundService.getYouTubePreview(this.youtubeUrl).subscribe({
       next: (response) => {
-        // response: { audioBlob, name, duration }
         this.audioBlob = response.audioBlob;
-        this.audioName = finalName; // On prend le nom choisi ou "Untitled Sound"
-        this.showAudioSpectrum = true; // On affiche le composant audio-spectrum
+        this.audioName = finalName;
+        this.showAudioSpectrum = true;
       },
       error: (error) => {
         console.error('Erreur lors de la pré-écoute du son YouTube :', error);
@@ -83,48 +83,66 @@ export class AddSoundBoxComponent {
       alert('Aucun fichier sélectionné.');
       return;
     }
-
     const finalName = this.soundName.trim() || this.selectedFile.name.split('.')[0];
-
-    // Ici, pas besoin d'aller sur le backend pour un preview, on a déjà le fichier
-    // On l'utilise directement comme source audio
     this.audioBlob = this.selectedFile;
     this.audioName = finalName;
-    this.showAudioSpectrum = true; // On affiche le composant
+    this.showAudioSpectrum = true;
   }
 
-  // Méthode appelée quand la région change dans l'audio-spectrum
-  onRegionChange(region: {start: number; end: number}) {
+  onRegionChange(region: { start: number; end: number }): void {
     this.regionStart = region.start;
     this.regionEnd = region.end;
   }
 
-  // Une fois la région choisie, l'utilisateur clique sur "Enregistrer le trim"
   saveTrimmedSound(): void {
     if (!this.audioBlob) {
       console.error('No audio loaded to trim.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('data', this.audioBlob, this.audioName + '.wav');
-    formData.append('name', this.audioName);
-    formData.append('name', this.audioName);
-    formData.append('duration', Math.round(this.regionEnd).toString());
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const audioBase64 = (reader.result as string).split(',')[1];
 
-    this.soundService.uploadSoundFileToUser(formData).subscribe({
-      next: (response) => {
-        console.log('Son ajouté avec succès (trim) :', response);
-        alert(`Son ajouté avec succès : ${response}`);
-        this.soundAdded.emit();
-        this.closePopup();
-      },
-      error: (error) => {
-        console.error('Erreur lors de l\'ajout du son (trim) :', error);
-        alert('Erreur : ' + (error.error?.error || 'Une erreur est survenue.'));
-      },
-    });
+      // Étape 1 : Appel à trimAndUploadSound
+      this.soundService.trimAndUploadSound(audioBase64, this.regionStart, this.regionEnd).subscribe({
+        next: (response) => {
+          console.log('Trimmed audio received:', response);
+
+          // Étape 2 : Préparer les données JSON
+          const soundData = {
+            data: response.trimmed_audio_base64, // Audio en Base64
+            name: `${this.audioName}.wav`,     // Nom du fichier
+            duration: Math.round(this.regionEnd - this.regionStart), // Durée
+          };
+
+          console.log("response data : " + response.trimmed_audio_base64)
+
+          // Étape 3 : Envoyer les données JSON au backend
+          this.soundService.uploadSoundBytes(soundData).subscribe({
+            next: (saveResponse) => {
+              console.log('Sound saved successfully:', saveResponse);
+              alert('Son ajouté avec succès !');
+              this.soundAdded.emit();
+              this.closePopup();
+            },
+            error: (saveError) => {
+              console.error('Error saving trimmed sound:', saveError);
+              alert('Erreur lors de la sauvegarde du son.');
+            },
+          });
+        },
+        error: (trimError) => {
+          console.error('Error trimming sound:', trimError);
+          alert('Erreur lors du découpage du son.');
+        },
+      });
+    };
+
+    reader.readAsDataURL(this.audioBlob);
   }
+
+
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0] || null;

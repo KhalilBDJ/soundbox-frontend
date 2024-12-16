@@ -46,10 +46,6 @@ export class SoundService {
     return this.http.delete<void>(`${this.apiUrl}/${soundId}`);
   }
 
-  /**
-   * Nouvelle méthode pour obtenir un aperçu audio depuis une URL YouTube.
-   * Cet endpoint doit renvoyer un blob audio et les métadonnées dans les en-têtes.
-   */
   getYouTubePreview(youtubeUrl: string): Observable<{ audioBlob: Blob, name: string, duration: number }> {
     return this.http.post(`${this.apiUrl}/user/youtube/preview`, null, {
       params: { url: youtubeUrl },
@@ -65,11 +61,16 @@ export class SoundService {
     );
   }
 
-  trimAndUploadSound(audioBase64: string, start: number, end: number): Observable<{ trimmedAudioBase64: string }> {
-    return this.http.post<{ trimmedAudioBase64: string }>(`${this.apiUrl}/trim`, {
+  trimAndUploadSound(audioBase64: string, start: number, end: number): Observable<{ trimmed_audio_base64: string }> {
+    return this.http.post<{ trimmed_audio_base64: string }>(`${this.apiUrl}/trim`, {
       audioBase64,
       start,
       end,
+    });
+  }
+  uploadSoundBytes(soundData: { data: string; name: string; duration: number }): Observable<{ message: string; name: string }> {
+    return this.http.post<{ message: string; name: string }>(`${this.apiUrl}/user/bytes`, soundData, {
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 
