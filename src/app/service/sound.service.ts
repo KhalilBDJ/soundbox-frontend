@@ -46,20 +46,30 @@ export class SoundService {
     return this.http.delete<void>(`${this.apiUrl}/${soundId}`);
   }
 
-  getYouTubePreview(youtubeUrl: string): Observable<{ audioBlob: Blob, name: string, duration: number }> {
-    return this.http.post(`${this.apiUrl}/user/youtube/preview`, null, {
-      params: { url: youtubeUrl },
-      responseType: 'blob',
-      observe: 'response'
-    }).pipe(
-      map((response: HttpResponse<Blob>) => {
-        const name = response.headers.get('x-audio-name') || 'Untitled';
-        const duration = Number(response.headers.get('x-audio-duration') || 0);
-        const audioBlob = response.body as Blob;
-        return { audioBlob, name, duration };
+  getYouTubePreview(youtubeUrl: string): Observable<{ audioBlob: Blob; name: string; duration: number }> {
+    return this.http.post<{ name: string; duration: number; audioData: string }>(
+      `${this.apiUrl}/user/youtube/preview`,
+      null,
+      { params: { url: youtubeUrl } }
+    ).pipe(
+      map((response) => {
+        // Convertir le Base64 en Blob
+        const binaryString = window.atob(response.audioData);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        const audioBlob = new Blob([bytes], { type: 'audio/mp3' });
+
+        return {
+          audioBlob: audioBlob,
+          name: response.name,
+          duration: response.duration,
+        };
       })
     );
   }
+
 
   trimAndUploadSound(audioBase64: string, start: number, end: number): Observable<{ trimmed_audio_base64: string }> {
     return this.http.post<{ trimmed_audio_base64: string }>(`${this.apiUrl}/trim`, {

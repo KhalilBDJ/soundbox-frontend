@@ -28,6 +28,7 @@ export class AddSoundBoxComponent {
   audioName: string = ''; // Nom du son
   regionStart: number = 0; // Début de la région
   regionEnd: number = 0;   // Fin de la région
+  duration: number=0;
 
   constructor(private soundService: SoundService) {}
 
@@ -51,6 +52,7 @@ export class AddSoundBoxComponent {
     this.showAudioSpectrum = false;
     this.audioBlob = null;
     this.audioName = '';
+    this.duration = 0;
   }
 
   addSound(): void {
@@ -68,7 +70,8 @@ export class AddSoundBoxComponent {
     this.soundService.getYouTubePreview(this.youtubeUrl).subscribe({
       next: (response) => {
         this.audioBlob = response.audioBlob;
-        this.audioName = finalName;
+        this.audioName = response.name;
+        this.duration = response.duration;
         this.showAudioSpectrum = true;
       },
       error: (error) => {
