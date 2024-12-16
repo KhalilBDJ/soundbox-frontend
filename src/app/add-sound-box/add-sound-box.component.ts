@@ -115,7 +115,7 @@ export class AddSoundBoxComponent {
           // Étape 2 : Préparer les données JSON
           const soundData = {
             data: response.trimmed_audio_base64, // Audio en Base64
-            name: `${this.audioName}.wav`,     // Nom du fichier
+            name: `${this.audioName}`,     // Nom du fichier
             duration: Math.round(this.regionEnd - this.regionStart), // Durée
           };
 
