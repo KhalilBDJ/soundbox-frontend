@@ -10,7 +10,7 @@ interface LoginRequestDTO {
 
 interface LoginResponseDTO {
   id: number;
-  email: string;
+  username: string;
   jwtToken: string;
 }
 
@@ -27,7 +27,7 @@ export class AuthService {
     return this.http.post<LoginResponseDTO>(`${this.apiUrl}/login`, credentials).pipe(
       map((response) => {
         localStorage.setItem('authToken', response.jwtToken);
-        localStorage.setItem('userEmail', response.email);
+        localStorage.setItem('username', response.username);
         return response;
       }),
       catchError((error) => {
@@ -36,14 +36,29 @@ export class AuthService {
       })
     );
   }
-  private userEmail: string = '';
 
-  setUserEmail(email: string): void {
-    this.userEmail = email;
+  // Méthode d'inscription
+  register(registerData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register`, registerData).pipe(
+      map((response) => {
+        console.log('User registered successfully:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Registration error:', error);
+        throw error;
+      })
+    );
   }
 
-  getUserEmail(): string |  null  {
-    return localStorage.getItem('userEmail');
+  private userEmail: string = '';
+
+  setUsername(username: string): void {
+    this.userEmail = username;
+  }
+
+  getUsername(): string |  null  {
+    return localStorage.getItem('username');
   }
 
   getToken(): string | null {

@@ -17,6 +17,6 @@ export class HomeComponent {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.userEmail = this.authService.getUserEmail(); //
+    this.userEmail = this.authService.getUsername(); //
   }
 }

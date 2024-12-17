@@ -66,11 +66,12 @@ export class AddSoundBoxComponent {
   }
 
   private addSoundFromYouTubePreview(): void {
-    const finalName = this.soundName.trim() || 'Untitled Sound';
+
     this.soundService.getYouTubePreview(this.youtubeUrl).subscribe({
       next: (response) => {
+        const finalName = this.soundName.trim() || response.name;
         this.audioBlob = response.audioBlob;
-        this.audioName = response.name;
+        this.audioName = finalName;
         this.duration = response.duration;
         this.showAudioSpectrum = true;
       },

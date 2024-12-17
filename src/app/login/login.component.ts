@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
@@ -11,7 +11,7 @@ import {AudioSpectrumComponent} from '../audio-spectrum/audio-spectrum.component
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [
-    FormsModule, CommonModule, AudioSpectrumComponent
+    FormsModule, CommonModule, AudioSpectrumComponent, RouterLink
   ]
 })
 export class LoginComponent {
@@ -33,7 +33,7 @@ export class LoginComponent {
     this.authService.login({ email: this.email, password: this.password }).subscribe(
       (response) => {
         console.log('Login successful:', response);
-        this.authService.setUserEmail(response.email);
+        this.authService.setUsername(response.username);
         this.router.navigate(['/home']);
       },
       (error) => {
