@@ -1,9 +1,27 @@
 <div id="waveform" class="w-full bg-gray-100 border border-gray-300 shadow-md rounded-md"></div>
 
 <div class="flex items-center mt-4 space-x-4">
+  <!-- Bouton Play Region -->
   <button
     id="play-region"
     class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">
     Play Region
   </button>
+
+  <!-- Bouton Stop -->
+  <button
+    id="stop-region"
+    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+    Stop
+  </button>
+
+  <!-- Barre de Zoom -->
+  <input
+    id="zoom-slider"
+    type="range"
+    min="0"
+    max="1000"
+    value="0"
+    class="w-full"
+  />
 </div>

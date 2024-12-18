@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import { SoundService } from '../service/sound.service';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
@@ -17,6 +17,8 @@ import { AudioSpectrumComponent } from '../audio-spectrum/audio-spectrum.compone
 })
 export class AddSoundBoxComponent {
   @Output() soundAdded = new EventEmitter<void>();
+  @ViewChild(AudioSpectrumComponent) audioSpectrumComponent!: AudioSpectrumComponent;
+
 
   isPopupVisible: boolean = false;
   isPopupFadingOut: boolean = false;
@@ -53,6 +55,12 @@ export class AddSoundBoxComponent {
     this.audioBlob = null;
     this.audioName = '';
     this.duration = 0;
+
+
+    // Stopper la lecture audio avant de sauvegarder
+    if (this.audioSpectrumComponent) {
+      this.audioSpectrumComponent.stopPlayback();
+    }
   }
 
   addSound(): void {
@@ -98,48 +106,41 @@ export class AddSoundBoxComponent {
     this.regionEnd = region.end;
   }
 
+
+  // Méthode pour sauvegarder le trim
   saveTrimmedSound(): void {
     if (!this.audioBlob) {
       console.error('No audio loaded to trim.');
       return;
     }
 
+    // Stopper la lecture audio avant de sauvegarder
+    if (this.audioSpectrumComponent) {
+      this.audioSpectrumComponent.stopPlayback();
+    }
+
     const reader = new FileReader();
     reader.onloadend = () => {
       const audioBase64 = (reader.result as string).split(',')[1];
 
-      // Étape 1 : Appel à trimAndUploadSound
       this.soundService.trimAndUploadSound(audioBase64, this.regionStart, this.regionEnd).subscribe({
         next: (response) => {
-          console.log('Trimmed audio received:', response);
-
-          // Étape 2 : Préparer les données JSON
           const soundData = {
-            data: response.trimmed_audio_base64, // Audio en Base64
-            name: `${this.audioName}`,     // Nom du fichier
-            duration: Math.round(this.regionEnd - this.regionStart), // Durée
+            data: response.trimmed_audio_base64,
+            name: `${this.audioName}`,
+            duration: Math.round(this.regionEnd - this.regionStart),
           };
 
-          console.log("response data : " + response.trimmed_audio_base64)
-
-          // Étape 3 : Envoyer les données JSON au backend
           this.soundService.uploadSoundBytes(soundData).subscribe({
-            next: (saveResponse) => {
-              console.log('Sound saved successfully:', saveResponse);
+            next: () => {
               alert('Son ajouté avec succès !');
               this.soundAdded.emit();
               this.closePopup();
             },
-            error: (saveError) => {
-              console.error('Error saving trimmed sound:', saveError);
-              alert('Erreur lors de la sauvegarde du son.');
-            },
+            error: () => alert('Erreur lors de la sauvegarde du son.'),
           });
         },
-        error: (trimError) => {
-          console.error('Error trimming sound:', trimError);
-          alert('Erreur lors du découpage du son.');
-        },
+        error: () => alert('Erreur lors du découpage du son.'),
       });
     };
 
