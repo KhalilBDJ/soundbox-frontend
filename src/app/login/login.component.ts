@@ -31,15 +31,23 @@ export class LoginComponent {
 
   onLogin(): void {
     this.authService.login({ email: this.email, password: this.password }).subscribe(
-      (response) => {
-        console.log('Login successful:', response);
-        this.authService.setUsername(response.username);
-        this.router.navigate(['/home']);
+      () => {
+        this.authService.sendOtp(this.email).subscribe(
+          () => {
+            alert('Un code OTP a été envoyé à votre adresse e-mail.');
+            this.router.navigate(['/verify-otp'], { state: { email: this.email } }); // Passer l'e-mail via state
+          },
+          () => {
+            this.errorMessage = 'Erreur lors de l\'envoi de l\'OTP.';
+          }
+        );
       },
-      (error) => {
+      () => {
         this.errorMessage = 'Email ou mot de passe incorrect.';
       }
     );
   }
+
+
 }
 

@@ -9,11 +9,16 @@ interface LoginRequestDTO {
 }
 
 interface LoginResponseDTO {
+  userId: number;
+  username: string;
+  email: string;
+}
+
+interface OtpResponse{
   id: number;
   username: string;
   jwtToken: string;
 }
-
 @Injectable({
   providedIn: 'root',
 })
@@ -26,8 +31,10 @@ export class AuthService {
   login(credentials: LoginRequestDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(`${this.apiUrl}/login`, credentials).pipe(
       map((response) => {
-        localStorage.setItem('authToken', response.jwtToken);
-        localStorage.setItem('username', response.username);
+        // Stocke temporairement les infos utilisateur dans localStorage
+        localStorage.setItem('tempUserId', response.userId.toString());
+        localStorage.setItem('tempUsername', response.username);
+        localStorage.setItem('tempEmail', response.email);
         return response;
       }),
       catchError((error) => {
@@ -50,6 +57,30 @@ export class AuthService {
       })
     );
   }
+
+  verifyOtp(email: string, otp: string): Observable<OtpResponse> {
+    return this.http.post<OtpResponse>(`${this.apiUrl}/verify-otp`, { email, otp }).pipe(
+      map((response) => {
+        // Remplace les infos temporaires par le token définitif
+        localStorage.setItem('authToken', response.jwtToken);
+        localStorage.setItem('username', response.username);
+        localStorage.removeItem('tempUserId');
+        localStorage.removeItem('tempUsername');
+        localStorage.removeItem('tempEmail');
+        return response;
+      }),
+      catchError((error) => {
+        console.error('OTP validation error:', error);
+        throw error;
+      })
+    );
+  }
+
+
+  sendOtp(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/send-otp`, { email });
+  }
+
 
   private userEmail: string = '';
 
