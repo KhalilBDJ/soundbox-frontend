@@ -75,4 +75,5 @@ export class BoxComponent {
       });
     }, 300); // Permettre à l'animation fade-out de se terminer
   }
+
 }

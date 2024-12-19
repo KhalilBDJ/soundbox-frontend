@@ -12,7 +12,7 @@ import { AudioSpectrumComponent } from '../audio-spectrum/audio-spectrum.compone
   imports: [
     FormsModule,
     NgIf,
-    AudioSpectrumComponent // On intègre le composant
+    AudioSpectrumComponent
   ]
 })
 export class AddSoundBoxComponent {
@@ -27,9 +27,9 @@ export class AddSoundBoxComponent {
   soundName: string = '';
   showAudioSpectrum: boolean = false;
   audioBlob: Blob | null = null;
-  audioName: string = ''; // Nom du son
-  regionStart: number = 0; // Début de la région
-  regionEnd: number = 0;   // Fin de la région
+  audioName: string = '';
+  regionStart: number = 0;
+  regionEnd: number = 0;
   duration: number=0;
 
   constructor(private soundService: SoundService) {}
@@ -107,14 +107,12 @@ export class AddSoundBoxComponent {
   }
 
 
-  // Méthode pour sauvegarder le trim
   saveTrimmedSound(): void {
     if (!this.audioBlob) {
       console.error('No audio loaded to trim.');
       return;
     }
 
-    // Stopper la lecture audio avant de sauvegarder
     if (this.audioSpectrumComponent) {
       this.audioSpectrumComponent.stopPlayback();
     }
