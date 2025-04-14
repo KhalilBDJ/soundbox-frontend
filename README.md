@@ -13,7 +13,6 @@ Le backend (Java Spring) est disponible séparément: [**Ici**](https://github.c
 - 🧰 Espace personnel avec vos **soundboards**
 - 🧩 Ajout et suppression de boutons sonores
 - ⬆️ Upload de fichiers audio personnalisés
-- 🎨 Interface responsive et épurée grâce à **CoreUI 5.1**
 
 ---
 
@@ -21,7 +20,6 @@ Le backend (Java Spring) est disponible séparément: [**Ici**](https://github.c
 ## 🚀 Stack technique
 
 - **Framework** : [Angular](https://angular.io/)
-- **UI** : [CoreUI 5.1](https://coreui.io/angular/)
 - **Langage** : TypeScript
 - **HTTP Client** : `HttpClientModule` pour communiquer avec l'API backend
 - **Gestion des formulaires** : `ReactiveFormsModule`
