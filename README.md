@@ -18,15 +18,6 @@ Le backend (Java Spring) est disponible séparément : [**Ici**](https://github.
 
 ---
 
-## 🎬 Exemple d'utilisation (à venir)
-
-> Tu peux ici insérer un GIF ou des captures d’écran montrant :
-> - L’ajout d’un lien YouTube
-> - Le cropping audio
-> - L’organisation d’un soundboard
-
----
-
 ## 🚀 Stack technique
 
 - **Framework** : [Angular](https://angular.io/)
