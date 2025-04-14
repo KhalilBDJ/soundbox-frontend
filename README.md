@@ -3,7 +3,7 @@
 Bienvenue dans **Soundbox**, une application web interactive permettant aux utilisateurs d'organiser, jouer et personnaliser leurs propres **boîtes à sons** !
 
 Ce dépôt contient le **frontend Angular** du projet.  
-Le backend (Java Spring) est disponible séparément: [**Ici**](git@github.com:KhalilBDJ/soundbox-backend.git)
+Le backend (Java Spring) est disponible séparément: [**Ici**](https://github.com/KhalilBDJ/soundbox-backend)
 
 ---
 
