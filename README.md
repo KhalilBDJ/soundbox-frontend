@@ -1,27 +1,43 @@
-# Frontend
+# 🎵 Soundbox Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11.
+Bienvenue dans **Soundbox**, une application web interactive permettant aux utilisateurs d'organiser, jouer et personnaliser leurs propres **boîtes à sons** !
 
-## Development server
+Ce dépôt contient le **frontend Angular** du projet.  
+Le backend (Java Spring) est disponible séparément.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## ✨ Fonctionnalités
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- 🔐 Authentification sécurisée (connexion / inscription)
+- 🧰 Espace personnel avec vos **soundboards**
+- 🧩 Ajout et suppression de boutons sonores
+- ⬆️ Upload de fichiers audio personnalisés
+- 🎨 Interface responsive et épurée grâce à **CoreUI 5.1**
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## 🚀 Stack technique
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Framework** : [Angular](https://angular.io/)
+- **UI** : [CoreUI 5.1](https://coreui.io/angular/)
+- **Langage** : TypeScript
+- **HTTP Client** : `HttpClientModule` pour communiquer avec l'API backend
+- **Gestion des formulaires** : `ReactiveFormsModule`
+- **Sécurité** : Authentification via JWT ou Cookies (selon la config backend)
 
-## Running end-to-end tests
+---
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## ⚙️ Installation
 
-## Further help
+```bash
+# 1. Cloner le dépôt
+git clone git@github.com:KhalilBDJ/soundbox-frontend.git
+cd soundbox-frontend
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# 2. Installer les dépendances
+npm install
+
+# 3. Lancer le serveur Angular
+ng serve
